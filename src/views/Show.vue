@@ -181,7 +181,6 @@ const handleUpdate = () => {
                         <thead>
                             <tr>
                                 <th>id</th>
-                                <th>organizer_id</th>
                                 <th>log_message</th>
                             </tr>
                         </thead>
@@ -189,7 +188,6 @@ const handleUpdate = () => {
                             <tr v-if="store.logs[0] && store.logs[0].children.length"
                                 v-for="log in store.logs[0].children" :key="log.id">
                                 <td>{{ log.id }}</td>
-                                <td>{{ log.organizer_id }}</td>
                                 <td>{{ log.log_message }}</td>
                             </tr>
                         </tbody>
