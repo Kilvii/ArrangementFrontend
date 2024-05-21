@@ -13,10 +13,13 @@ const routes = [
                 path: '/show', name: 'main.show', component: page('Show'),
             },
             {
-                path: '/create', name: 'main.create', component: page('Create'),
+                path: '/add', name: 'main.add', component: page('Add'),
             },
             {
                 path: '/edit', name: 'main.edit', component: page('Edit'),
+            },
+            {
+                path: '/access', name: 'main.access', component: page('Access'),
             },
         ]
     },

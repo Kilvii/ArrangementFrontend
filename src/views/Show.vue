@@ -148,6 +148,8 @@ const handleUpdate = () => {
                                 <th>citizenship</th>
                                 <th>passport_series</th>
                                 <th>passport_number</th>
+                                <th>room_id</th>
+                                <th>seat</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -169,6 +171,8 @@ const handleUpdate = () => {
                                 <td>{{ participant.citizenship }}</td>
                                 <td>{{ participant.passport_series }}</td>
                                 <td>{{ participant.passport_number }}</td>
+                                <td>{{ participant.room_id }}</td>
+                                <td>{{ participant.seat }}</td>
                             </tr>
                         </tbody>
                     </table>

@@ -8,11 +8,16 @@ const props = defineProps({
         type: String,
         default: "primary",
     },
+    icon: {
+        type: String,
+        default: "",
+    }
 })
 </script>
 <template>
     <div class="btn-wrap">
         <button class="btn" :class="[`btn_${color}`]">
+            <img v-if="icon" :src="icon" alt="btn-icon" />
             {{ title }}
         </button>
     </div>

@@ -2,20 +2,47 @@
 import { useRoute, useRouter } from 'vue-router';
 import { ref } from 'vue';
 import NavItemComponent from '@/components/NavItemComponent.vue';
+import { useArrangementStore } from '@/stores/ArrangementStore';
+import ModaDeleteComponent from '@/components/ModalDeleteComponent.vue';
 
 const router = useRouter()
 const route = useRoute()
-
+const store = useArrangementStore()
+const isCreated = ref(false)
+const showModal = ref(false);
 const activeTab = ref(route.path.replace('/', ""))
+
+const handleCreateTables = () => {
+    if (isCreated.value == false) {
+        isCreated.value = true
+        store.createTables()
+        alert("Таблицы успешно созданы")
+    }
+    else {
+        alert("Таблицы уже созданы")
+    }
+}
+
+const handleConfurmDelete = () => {
+    showModal.value = true;
+};
+
+const handleDropTables = () => {
+    isCreated.value = false
+    store.dropTables()
+    showModal.value = false
+    alert("Таблицы успешно удалены")
+
+}
 
 const handleShowNavigate = () => {
     activeTab.value = 'show'
     router.push({ name: 'main.show' });
 }
 
-const handleCreateNavigate = () => {
-    activeTab.value = 'create'
-    router.push({ name: 'main.create' });
+const handleAddNavigate = () => {
+    activeTab.value = 'add'
+    router.push({ name: 'main.add' });
 }
 
 const handleEditNavigate = () => {
@@ -23,17 +50,29 @@ const handleEditNavigate = () => {
     router.push({ name: 'main.edit' });
 }
 
+const handleAccessNavigate = () => {
+    activeTab.value = 'access'
+    router.push({ name: 'main.access' });
+}
+
+const exitModal = () => {
+    showModal.value = false;
+}
+
 </script>
 
 <template>
     <main class="layout">
         <div class="navigation">
-            <NavItemComponent title="Просмотр" :color="activeTab === 'show' ? 'active' : 'default'"
-                @click="handleShowNavigate" />
-            <NavItemComponent title="Создание" :color="activeTab === 'create' ? 'active' : 'default'"
-                @click="handleCreateNavigate" />
-            <NavItemComponent title="Редактирование" :color="activeTab === 'edit' ? 'active' : 'default'"
-                @click="handleEditNavigate" />
+            <NavItemComponent title="Создание таблиц" @click="handleCreateTables" />
+            <NavItemComponent title="Добавление записей" :color="activeTab === 'add' ? 'active' : 'default'"
+                @click="handleAddNavigate" />
+            <!-- <NavItemComponent title="Редактирование записей таблиц" :color="activeTab === 'edit' ? 'active' : 'default'"
+                @click="handleEditNavigate" /> -->
+            <NavItemComponent title="Удаление таблиц" @click="handleConfurmDelete" />
+            <NavItemComponent title="Управление доступом" :color="activeTab === 'access' ? 'active' : 'default'"
+                @click="handleAccessNavigate" />
+            <ModaDeleteComponent v-if="showModal" @close="exitModal()" @deleteItem="handleDropTables" />
         </div>
         <RouterView />
     </main>

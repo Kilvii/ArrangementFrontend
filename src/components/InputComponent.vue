@@ -16,7 +16,7 @@ const model = defineModel()
 
 <template>
     <div class="input-wrap">
-        <input class="input-field" pattern="[0-9]*" v-model="model" :placeholder="placeholder" :maxlength="maxLenght" />
+        <input class="input-field" v-model="model" :placeholder="placeholder" :maxlength="maxLenght" />
     </div>
 </template>
 
