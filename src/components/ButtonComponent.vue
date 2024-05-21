@@ -55,6 +55,10 @@ const props = defineProps({
     background-color: red;
 }
 
+.btn_save {
+    background-color: rgb(186, 11, 11);
+}
+
 .btn:hover {
     opacity: 0.7;
 }

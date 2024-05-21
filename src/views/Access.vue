@@ -5,24 +5,32 @@ import InputComponent from '@/components/InputComponent.vue';
 import { useArrangementStore } from '@/stores/ArrangementStore';
 import NavItemComponent from '@/components/NavItemComponent.vue';
 import ModalAddComponent from '@/components/ModalAddComponent.vue';
+import ModalEditComponent from '@/components/ModalEditComponent.vue';
 
 const store = useArrangementStore()
 store.initInterfaceAccess()
 const activeTab = ref('')
-const showModal = ref(false)
+const showAddModal = ref(false)
+const showEditModal = ref(false)
 
 const handleAddAccess = () => {
-    showModal.value = true
+    showAddModal.value = true
 };
 
 const exitModal = () => {
-    showModal.value = false;
+    showAddModal.value = false
+    showEditModal.value = false
 }
 
 const handleCreateItem = (login, password) => {
-    store.addAccess(login, password);
-    showModal.value = false;
+    store.addAccess(login, password)
+    showAddModal.value = false
 };
+
+const handleEditItem = (index) => {
+    showEditModal.value = true
+    store.editAccessItem(index)
+}
 
 </script>
 
@@ -34,10 +42,11 @@ const handleCreateItem = (login, password) => {
                     <h2 style="color: white;">Interface access</h2>
                     <div class="options">
                         <div class='btn-field'>
-                            <ButtonComponent color="delete" icon="../src/icons/Add.svg" @click="handleAddAccess" />
+                            <ButtonComponent color="delete" icon="../src/icons/Add.svg" @click.stop="handleAddAccess" />
                         </div>
                         <div class='btn-field'>
-                            <ButtonComponent color="delete" icon="../src/icons/Update.svg" @click="store.initInterfaceAccess()" />
+                            <ButtonComponent color="delete" icon="../src/icons/Update.svg"
+                                @click.stop="store.initInterfaceAccess()" />
                         </div>
                     </div>
                 </div>
@@ -52,7 +61,8 @@ const handleCreateItem = (login, password) => {
                         </thead>
                         <tbody>
                             <tr v-if="store.interface_access[0] && store.interface_access[0].children.length"
-                                v-for="admin in store.interface_access[0].children" :key="admin.id">
+                                v-for="(admin, index) in store.interface_access[0].children" :key="index"
+                                @click="handleEditItem(index)">
                                 <td>{{ admin.id }}</td>
                                 <td>{{ admin.login }}</td>
                                 <td>{{ admin.password }}</td>
@@ -62,7 +72,9 @@ const handleCreateItem = (login, password) => {
                 </div>
             </div>
         </div>
-        <ModalAddComponent v-if="showModal" @close="exitModal()" @create="handleCreateItem" />
+        <ModalEditComponent v-if="showEditModal" :data="store.interface_access" :editIndex="store.editingIndex"
+            @close="exitModal()" @update="" @delete="" />
+        <ModalAddComponent v-if="showAddModal" @close="exitModal()" @create="handleCreateItem" />
     </div>
 </template>
 

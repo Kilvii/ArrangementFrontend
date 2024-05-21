@@ -23,7 +23,7 @@ const handleCreateTables = () => {
     }
 }
 
-const handleConfurmDelete = () => {
+const handleConfirmDelete = () => {
     showModal.value = true;
 };
 
@@ -67,9 +67,9 @@ const exitModal = () => {
             <NavItemComponent title="Создание таблиц" @click="handleCreateTables" />
             <NavItemComponent title="Добавление записей" :color="activeTab === 'add' ? 'active' : 'default'"
                 @click="handleAddNavigate" />
-            <!-- <NavItemComponent title="Редактирование записей таблиц" :color="activeTab === 'edit' ? 'active' : 'default'"
-                @click="handleEditNavigate" /> -->
-            <NavItemComponent title="Удаление таблиц" @click="handleConfurmDelete" />
+            <NavItemComponent title="Редактирование записей таблиц" :color="activeTab === 'edit' ? 'active' : 'default'"
+                @click="handleEditNavigate" />
+            <NavItemComponent title="Удаление таблиц" @click="handleConfirmDelete" />
             <NavItemComponent title="Управление доступом" :color="activeTab === 'access' ? 'active' : 'default'"
                 @click="handleAccessNavigate" />
             <ModaDeleteComponent v-if="showModal" @close="exitModal()" @deleteItem="handleDropTables" />

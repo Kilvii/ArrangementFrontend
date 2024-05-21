@@ -9,6 +9,14 @@ export const useArrangementStore = defineStore('ArrangementStore', () => {
   const organizers = reactive([]);
   const venues = reactive([]);
   const interface_access = reactive([]);
+  const editingIndex = ref(null)
+
+  function checkAuth(firstInput, secondInput) {
+    const user = interface_access[0].children.find(
+      (user) => user.login === firstInput && user.password === secondInput
+    );
+    return user !== undefined;
+  }
 
   async function createTables() {
     createPlacements()
@@ -179,5 +187,9 @@ export const useArrangementStore = defineStore('ArrangementStore', () => {
     }
   }
 
-  return { placements, participants, organizers, venues, interface_access, createTables, initPlacements, initParticipants, initOrganizers, initVenues, initInterfaceAccess, dropTables, addPlacement, addVenue, addAccess }
+  async function editAccessItem(index) {
+    editingIndex.value = index
+  }
+
+  return { checkAuth, editingIndex, placements, participants, organizers, venues, interface_access, createTables, initPlacements, initParticipants, initOrganizers, initVenues, initInterfaceAccess, dropTables, addPlacement, addVenue, addAccess, editAccessItem }
 })

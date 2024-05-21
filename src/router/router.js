@@ -3,10 +3,16 @@ import { createWebHistory, createRouter } from 'vue-router'
 const routes = [
     {
         path: '/',
-        redirect: '/main',
+        redirect: '/login',
+    },
+    {
+        path: '/login',
+        name: 'auth',
+        component: page('Auth'),
     },
     {
         path: '/main',
+        name: 'main',
         component: layout('DefaultLayout'),
         children: [
             {

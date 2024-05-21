@@ -3,19 +3,29 @@ import { ref } from 'vue';
 import InputComponent from '@/components/InputComponent.vue';
 import ButtonComponent from './ButtonComponent.vue';
 
-const loginInput = ref("")
-const passwordInput = ref("")
+const props = defineProps({
+    data: {
+        type: Object,
+        required: true
+    },
+    editIndex: {
+        type: Number,
+        required: true
+    }
+})
 
-const emit = defineEmits(['create', 'close'])
+const emit = defineEmits(['update', 'deleteItem', 'close'])
 
 function close() {
     emit('close')
 }
 
-function create() {
-    const login = loginInput.value
-    const password = passwordInput.value
-    emit('create', login, password)
+function update() {
+    emit('update')
+}
+
+function deleteItem () {
+    emit('deleteItem')
 }
 
 </script>
@@ -25,23 +35,24 @@ function create() {
             <div class="modal-container">
                 <div class="modal-header">
                     <slot name="header">
-                        <h3>Создание пользователя с доступом</h3>
+                        <h3>Редактирование записи</h3>
+                        <div class='btn-field'>
+                            <ButtonComponent color="reset" icon="../src/icons/Close.svg" @click="close" />
+                        </div>
                     </slot>
                 </div>
                 <div class="modal-body">
                     <slot name="body">
-                        <div class='input-field'>
-                            <InputComponent v-model.trim="loginInput" placeholder="Логин" :max-lenght="16"/>
-                        </div>
-                        <div class='input-field'>
-                            <InputComponent v-model.trim="passwordInput" placeholder="Пароль" :max-lenght="16"/>
+                        <div class="editInfo" v-for="(column, index) in data[0].children[editIndex]" :key="index">
+                            <p><span>{{ index }}</span> : {{ column }}</p>
+                            <input >
                         </div>
                     </slot>
                 </div>
                 <div class="modal-footer">
                     <slot name="footer">
-                        <ButtonComponent color="reset" title="Создать" @click="create" />
-                        <ButtonComponent color="delete" title="Отмена" @click="close" />
+                        <ButtonComponent color="delete" title="Удалить" @click="deleteItem" />
+                        <ButtonComponent color="save" title="Сохранить" @click="update" />
                     </slot>
                 </div>
             </div>
@@ -50,6 +61,19 @@ function create() {
 </template>
 
 <style scoped>
+span {
+    font-size: 16px;
+}
+
+.editInfo{
+    display: flex;
+}
+
+.btn-field {
+    display: flex;
+    width: 40px;
+}
+
 .input-field {
     display: flex;
     flex-direction: column;
@@ -90,15 +114,15 @@ function create() {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     margin-top: 0;
     color: #42b983;
 }
 
 .modal-body {
     display: flex;
-    flex-direction: row;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
     justify-content: space-evenly;
     color: black;
     margin: 14px 0;
