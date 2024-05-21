@@ -7,22 +7,25 @@ import NavItemComponent from '@/components/NavItemComponent.vue';
 const showPlacements = ref(false)
 const showOrganizers = ref(false)
 const showParticipants = ref(false)
-const showLogs = ref(false)
+const showVenues = ref(false)
 const activeTab = ref('')
 const store = useArrangementStore()
-store.init()
+store.initPlacements()
+store.initOrganizers()
+store.initParticipants()
+store.initVenues()
 
 const handleShowPlacements = () => {
     showOrganizers.value = false
     showParticipants.value = false
-    showLogs.value = false
+    showVenues.value = false
     showPlacements.value = true
     activeTab.value = 'place'
 };
 
 const handleShowOrganizers = () => {
     showParticipants.value = false
-    showLogs.value = false
+    showVenues.value = false
     showPlacements.value = false
     showOrganizers.value = true
     activeTab.value = 'organiz'
@@ -30,22 +33,18 @@ const handleShowOrganizers = () => {
 
 const handleShowParticipants = () => {
     showOrganizers.value = false
-    showLogs.value = false
+    showVenues.value = false
     showPlacements.value = false
     showParticipants.value = true
     activeTab.value = 'partic'
 };
 
-const handleShowLogs = () => {
+const handleShowVenues = () => {
     showOrganizers.value = false
     showParticipants.value = false
     showPlacements.value = false
-    showLogs.value = true
-    activeTab.value = 'log'
-};
-
-const handleUpdate = () => {
-    store.init()
+    showVenues.value = true
+    activeTab.value = 'venue'
 };
 
 </script>
@@ -55,23 +54,30 @@ const handleUpdate = () => {
         <div class="screens">
             <div class="tabs">
                 <div class='btn-field'>
-                    <NavItemComponent :color="activeTab === 'place' ? 'active' : 'default'" title="Помещения" @click="handleShowPlacements" />
+                    <NavItemComponent :color="activeTab === 'place' ? 'active' : 'default'" title="Помещения"
+                        @click="handleShowPlacements" />
                 </div>
                 <div class='btn-field'>
-                    <NavItemComponent :color="activeTab === 'organiz' ? 'active' : 'default'" title="Организаторы" @click="handleShowOrganizers" />
+                    <NavItemComponent :color="activeTab === 'organiz' ? 'active' : 'default'" title="Организаторы"
+                        @click="handleShowOrganizers" />
                 </div>
                 <div class='btn-field'>
-                    <NavItemComponent :color="activeTab === 'partic' ? 'active' : 'default'" title="Участники" @click="handleShowParticipants" />
+                    <NavItemComponent :color="activeTab === 'partic' ? 'active' : 'default'" title="Участники"
+                        @click="handleShowParticipants" />
                 </div>
                 <div class='btn-field'>
-                    <NavItemComponent :color="activeTab === 'log' ? 'active' : 'default'" title="Логи" @click="handleShowLogs" />
-                </div>
-                <div class='btn-field'>
-                    <ButtonComponent color="delete" title="Обновить данные" @click="handleUpdate" />
+                    <NavItemComponent :color="activeTab === 'log' ? 'active' : 'default'" title="Места проведения"
+                        @click="handleShowVenues" />
                 </div>
             </div>
             <div v-if="showPlacements" class="placements">
-                <h2 class="placements-title" style="color: white;">Placements</h2>
+                <div class="title">
+                    <h2 class="placements-title" style="color: white;">Placements</h2>
+                    <div class='btn-field' id="update">
+                        <ButtonComponent color="delete" icon="../src/icons/Update.svg"
+                            @click.stop="store.initPlacements()" />
+                    </div>
+                </div>
                 <div class="scrollable-placements-table">
                     <table class="styled-table">
                         <thead>
@@ -95,7 +101,13 @@ const handleUpdate = () => {
                 </div>
             </div>
             <div v-if="showOrganizers" class="organizers">
-                <h2 class="organizers-title" style="color: white;">Organizers</h2>
+                <div class="title">
+                    <h2 class="organizers-title" style="color: white;">Organizers</h2>
+                    <div class='btn-field' id="update">
+                        <ButtonComponent color="delete" icon="../src/icons/Update.svg"
+                            @click.stop="store.initPlacements()" />
+                    </div>
+                </div>
                 <div class="scrollable-organizers-table">
                     <table class="styled-table">
                         <thead>
@@ -127,7 +139,13 @@ const handleUpdate = () => {
                 </div>
             </div>
             <div v-if="showParticipants" class="participants">
-                <h2 class="participants-title" style="color: white;">Participants</h2>
+                <div class="title">
+                    <h2 class="participants-title" style="color: white;">Participants</h2>
+                    <div class='btn-field' id="update">
+                        <ButtonComponent color="delete" icon="../src/icons/Update.svg"
+                            @click.stop="store.initPlacements()" />
+                    </div>
+                </div>
                 <div class="scrollable-participants-table">
                     <table class="styled-table">
                         <thead>
@@ -174,23 +192,27 @@ const handleUpdate = () => {
                     </table>
                 </div>
             </div>
-            <div v-if="showLogs" class="logging">
-                <h2 class="logging-title" style="color: white;">Logs</h2>
-                <div class="scrollable-logging-table">
+            <div v-if="showVenues" class="venues">
+                <div class="title">
+                    <h2 class="venues-title" style="color: white;">Venues</h2>
+                    <div class='btn-field' id="update">
+                        <ButtonComponent color="delete" icon="../src/icons/Update.svg"
+                            @click.stop="store.initPlacements()" />
+                    </div>
+                </div>
+                <div class="scrollable-venues-table">
                     <table class="styled-table">
                         <thead>
                             <tr>
                                 <th>id</th>
-                                <th>organizer_id</th>
-                                <th>log_message</th>
+                                <th>venue</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-if="store.logs[0] && store.logs[0].children.length"
-                                v-for="log in store.logs[0].children" :key="log.id">
-                                <td>{{ log.id }}</td>
-                                <td>{{ log.organizer_id }}</td>
-                                <td>{{ log.log_message }}</td>
+                            <tr v-if="store.venues[0] && store.venues[0].children.length"
+                                v-for="venue in store.venues[0].children" :key="venue.id">
+                                <td>{{ venue.id }}</td>
+                                <td>{{ venue.venue }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -234,6 +256,24 @@ const handleUpdate = () => {
     margin-right: 16px;
 }
 
+
+.title {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+#update {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: flex-end;
+    margin-top: auto;
+    width: 40px;
+}
+
 .btn-field {
     display: flex;
     flex-direction: row;
@@ -254,7 +294,6 @@ const handleUpdate = () => {
     display: flex;
     flex-direction: column;
     padding: 16px;
-    width: 1000px;
 }
 
 .participants {
@@ -264,7 +303,7 @@ const handleUpdate = () => {
     width: 1428px;
 }
 
-.logging {
+.venues {
     display: flex;
     flex-direction: column;
     padding: 16px;
@@ -283,7 +322,6 @@ p {
 }
 
 .scrollable-organizers-table {
-    width: 986px;
     overflow-y: auto;
 }
 
@@ -293,7 +331,7 @@ p {
     overflow-y: auto;
 }
 
-.scrollable-logging-table {
+.scrollable-venues-table {
     max-height: 440px;
     overflow-y: auto;
 }
