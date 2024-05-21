@@ -3,17 +3,89 @@ import { ref } from 'vue';
 import ButtonComponent from '@/components/ButtonComponent.vue';
 import { useArrangementStore } from '@/stores/ArrangementStore';
 import NavItemComponent from '@/components/NavItemComponent.vue';
+import ModalEditComponent from '@/components/ModalEditComponent.vue';
 
 const showPlacements = ref(false)
 const showOrganizers = ref(false)
 const showParticipants = ref(false)
 const showVenues = ref(false)
+const showEditPlacementModal = ref(false)
+const showEditOrganizertModal = ref(false)
+const showEditVenueModal = ref(false)
+const showEditParticipantModal = ref(false)
 const activeTab = ref('')
 const store = useArrangementStore()
 store.initPlacements()
 store.initOrganizers()
 store.initParticipants()
 store.initVenues()
+
+const exitModal = () => {
+    showEditPlacementModal.value = false
+    showEditOrganizertModal.value = false
+    showEditParticipantModal.value = false
+    showEditVenueModal.value = false
+}
+
+const handleEditPlacement = (index) => {
+    showEditPlacementModal.value = true
+    store.editItem(index)
+}
+
+const handleEditOrganizer = (index) => {
+    showEditOrganizertModal.value = true
+    store.editItem(index)
+}
+
+const handleEditParticipant = (index) => {
+    showEditParticipantModal.value = true
+    store.editItem(index)
+}
+
+const handleEditVenue = (index) => {
+    showEditVenueModal.value = true
+    store.editItem(index)
+}
+
+const handleUpdatePlacement = (index, object) => {
+    store.updatePlacementItem(index, object)
+    showEditPlacementModal.value = false
+}
+
+const handleDeletePlacement = (index) => {
+    store.deletePlacementItem(index)
+    showEditPlacementModal.value = false
+}
+
+const handleUpdateOrganizer = (index, object) => {
+    store.updateOrganizerItem(index, object)
+    showEditOrganizertModal.value = false
+}
+
+const handleDeleteOrganizer = (index) => {
+    store.deleteOrganizerItem(index)
+    showEditOrganizertModal.value = false
+}
+
+const handleUpdateVenue = (index, object) => {
+    store.updateVenueItem(index, object)
+    showEditVenueModal.value = false
+}
+
+const handleDeleteVenue = (index) => {
+    store.deleteVenueItem(index)
+    showEditVenueModal.value = false
+}
+
+const handleUpdateParticipant = (index, object) => {
+    store.updateParticipantItem(index, object)
+    showEditParticipantModal.value = false
+}
+
+const handleDeleteParticipant = (index) => {
+    store.deleteParticipantItem(index)
+    showEditParticipantModal.value = false
+}
 
 const handleShowPlacements = () => {
     showOrganizers.value = false
@@ -84,16 +156,18 @@ const handleShowVenues = () => {
                             <tr>
                                 <th>id</th>
                                 <th>room_id</th>
-                                <th>number_of_seats</th>
+                                <th>people_at_desk</th>
+                                <th>number_of_tables</th>
                                 <th>available_seats</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-if="store.placements[0] && store.placements[0].children.length"
-                                v-for="placement in store.placements[0].children" :key="placement.id">
+                                v-for="(placement, index) in store.placements[0].children" :key="index" @click="handleEditPlacement(index)">
                                 <td>{{ placement.id }}</td>
                                 <td>{{ placement.room_id }}</td>
-                                <td>{{ placement.number_of_seats }}</td>
+                                <td>{{ placement.people_at_desk }}</td>
+                                <td>{{ placement.number_of_tables }}</td>
                                 <td>{{ placement.available_seats }}</td>
                             </tr>
                         </tbody>
@@ -105,7 +179,7 @@ const handleShowVenues = () => {
                     <h2 class="organizers-title" style="color: white;">Organizers</h2>
                     <div class='btn-field' id="update">
                         <ButtonComponent color="delete" icon="../src/icons/Update.svg"
-                            @click.stop="store.initPlacements()" />
+                            @click.stop="store.initOrganizers()" />
                     </div>
                 </div>
                 <div class="scrollable-organizers-table">
@@ -124,7 +198,7 @@ const handleShowVenues = () => {
                         </thead>
                         <tbody>
                             <tr v-if="store.organizers[0] && store.organizers[0].children.length"
-                                v-for="organizer in store.organizers[0].children" :key="organizer.id">
+                                v-for="(organizer, index) in store.organizers[0].children" :key="index" @click="handleEditOrganizer(index)">
                                 <td>{{ organizer.id }}</td>
                                 <td>{{ organizer.surname }}</td>
                                 <td>{{ organizer.firstname }}</td>
@@ -143,7 +217,7 @@ const handleShowVenues = () => {
                     <h2 class="participants-title" style="color: white;">Participants</h2>
                     <div class='btn-field' id="update">
                         <ButtonComponent color="delete" icon="../src/icons/Update.svg"
-                            @click.stop="store.initPlacements()" />
+                            @click.stop="store.initParticipants()" />
                     </div>
                 </div>
                 <div class="scrollable-participants-table">
@@ -166,11 +240,14 @@ const handleShowVenues = () => {
                                 <th>citizenship</th>
                                 <th>passport_series</th>
                                 <th>passport_number</th>
+                                <th>venue</th>
+                                <th>room_id</th>
+                                <th>seat</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-if="store.participants[0] && store.participants[0].children.length"
-                                v-for="participant in store.participants[0].children" :key="participant.id">
+                                v-for="(participant, index) in store.participants[0].children" :key="index" @click="handleEditParticipant(index)">
                                 <td>{{ participant.id }}</td>
                                 <td>{{ participant.surname }}</td>
                                 <td>{{ participant.firstname }}</td>
@@ -187,6 +264,9 @@ const handleShowVenues = () => {
                                 <td>{{ participant.citizenship }}</td>
                                 <td>{{ participant.passport_series }}</td>
                                 <td>{{ participant.passport_number }}</td>
+                                <td>{{ participant.venue }}</td>
+                                <td>{{ participant.room_id }}</td>
+                                <td>{{ participant.seat }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -197,7 +277,7 @@ const handleShowVenues = () => {
                     <h2 class="venues-title" style="color: white;">Venues</h2>
                     <div class='btn-field' id="update">
                         <ButtonComponent color="delete" icon="../src/icons/Update.svg"
-                            @click.stop="store.initPlacements()" />
+                            @click.stop="store.initVenues()" />
                     </div>
                 </div>
                 <div class="scrollable-venues-table">
@@ -210,7 +290,7 @@ const handleShowVenues = () => {
                         </thead>
                         <tbody>
                             <tr v-if="store.venues[0] && store.venues[0].children.length"
-                                v-for="venue in store.venues[0].children" :key="venue.id">
+                                v-for="(venue, index) in store.venues[0].children" :key="index" @click="handleEditVenue(index)">
                                 <td>{{ venue.id }}</td>
                                 <td>{{ venue.venue }}</td>
                             </tr>
@@ -219,6 +299,14 @@ const handleShowVenues = () => {
                 </div>
             </div>
         </div>
+        <ModalEditComponent v-if="showEditPlacementModal" :data="store.placements" :editIndex="store.editingIndex"
+            @close="exitModal()" @update="handleUpdatePlacement" @deleteItem="handleDeletePlacement" />
+        <ModalEditComponent v-if="showEditOrganizertModal" :data="store.organizers" :editIndex="store.editingIndex"
+            @close="exitModal()" @update="handleUpdateOrganizer" @deleteItem="handleDeleteOrganizer" />
+        <ModalEditComponent v-if="showEditParticipantModal" :data="store.participants" :editIndex="store.editingIndex"
+            @close="exitModal()" @update="handleUpdateParticipant" @deleteItem="handleDeleteParticipant" />
+        <ModalEditComponent v-if="showEditVenueModal" :data="store.venues" :editIndex="store.editingIndex"
+            @close="exitModal()" @update="handleUpdateVenue" @deleteItem="handleDeleteVenue" />
     </div>
 </template>
 
@@ -227,7 +315,6 @@ const handleShowVenues = () => {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     padding: 20px;
     min-width: 320px;
     min-height: 200px;
@@ -287,7 +374,6 @@ const handleShowVenues = () => {
     display: flex;
     flex-direction: column;
     padding: 16px;
-    width: 600px;
 }
 
 .organizers {
@@ -316,7 +402,6 @@ p {
 
 .scrollable-placements-table {
     max-height: 440px;
-    width: 600px;
     overflow-y: auto;
     overflow-x: hidden;
 }

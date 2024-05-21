@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, reactive, computed } from 'vue';
 import InputComponent from '@/components/InputComponent.vue';
 import ButtonComponent from './ButtonComponent.vue';
 
@@ -14,6 +14,8 @@ const props = defineProps({
     }
 })
 
+const { id, ...object } = props.data[0].children[props.editIndex];
+
 const emit = defineEmits(['update', 'deleteItem', 'close'])
 
 function close() {
@@ -21,11 +23,11 @@ function close() {
 }
 
 function update() {
-    emit('update')
+    emit('update', id, object)
 }
 
-function deleteItem () {
-    emit('deleteItem')
+function deleteItem() {
+    emit('deleteItem', id)
 }
 
 </script>
@@ -43,9 +45,9 @@ function deleteItem () {
                 </div>
                 <div class="modal-body">
                     <slot name="body">
-                        <div class="editInfo" v-for="(column, index) in data[0].children[editIndex]" :key="index">
+                        <div class="editInfo" v-for="(column, index) in object" :key="index">
                             <p><span>{{ index }}</span> : {{ column }}</p>
-                            <input >
+                            <input v-model="object[index]">
                         </div>
                     </slot>
                 </div>
@@ -65,8 +67,10 @@ span {
     font-size: 16px;
 }
 
-.editInfo{
+.editInfo {
     display: flex;
+    justify-content: space-between;
+    width: 100%;
 }
 
 .btn-field {

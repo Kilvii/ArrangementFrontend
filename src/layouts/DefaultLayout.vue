@@ -69,9 +69,9 @@ const exitModal = () => {
                 @click="handleAddNavigate" />
             <NavItemComponent title="Редактирование записей таблиц" :color="activeTab === 'edit' ? 'active' : 'default'"
                 @click="handleEditNavigate" />
-            <NavItemComponent title="Удаление таблиц" @click="handleConfirmDelete" />
             <NavItemComponent title="Управление доступом" :color="activeTab === 'access' ? 'active' : 'default'"
                 @click="handleAccessNavigate" />
+            <NavItemComponent title="Удаление таблиц" @click="handleConfirmDelete" />
             <ModaDeleteComponent v-if="showModal" @close="exitModal()" @deleteItem="handleDropTables" />
         </div>
         <RouterView />

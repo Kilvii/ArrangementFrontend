@@ -29,9 +29,18 @@ const handleCreateItem = (login, password) => {
 
 const handleEditItem = (index) => {
     showEditModal.value = true
-    store.editAccessItem(index)
+    store.editItem(index)
 }
 
+const handleUpdateItem = (index, object) => {
+    store.updateAccessItem(index, object)
+    showEditModal.value = false
+}
+
+const handleDeleteItem = (index) => {
+    store.deleteAccessItem(index)
+    showEditModal.value = false
+}
 </script>
 
 <template>
@@ -73,7 +82,7 @@ const handleEditItem = (index) => {
             </div>
         </div>
         <ModalEditComponent v-if="showEditModal" :data="store.interface_access" :editIndex="store.editingIndex"
-            @close="exitModal()" @update="" @delete="" />
+            @close="exitModal()" @update="handleUpdateItem" @deleteItem="handleDeleteItem" />
         <ModalAddComponent v-if="showAddModal" @close="exitModal()" @create="handleCreateItem" />
     </div>
 </template>

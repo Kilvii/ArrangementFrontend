@@ -146,6 +146,65 @@ export const useArrangementStore = defineStore('ArrangementStore', () => {
     }
   }
 
+  async function updateOrganizerItem(id, object) {
+    try {
+      await axios.put(`http://5.42.220.6:3000/api/organizers/${id}`, {
+        surname: object.surname,
+        firstname: object.firstname,
+        patronymic: object.patronymic,
+        faculty: object.faculty,
+        student_group: object.student_group,
+        venue: object.venue,
+        email: object.email,
+        password: object.password
+      });
+    } catch (error) {
+      console.error('Error initializing store:', error)
+    }
+  }
+
+  async function deleteOrganizerItem(index) {
+    try {
+      await axios.delete(`http://5.42.220.6:3000/api/organizers/${index}`);
+    } catch (error) {
+      console.error('Error initializing store:', error)
+    }
+  }
+
+  async function updateParticipantItem(id, object) {
+    try {
+      await axios.put(`http://5.42.220.6:3000/api/participants/${id}`, {
+        surname: object.surname,
+        firstname: object.firstname,
+        patronymic: object.patronymic,
+        gender: object.gender,
+        birthdate: object.birthdate,
+        age: object.age,
+        phone: object.phone,
+        email: object.email,
+        school: object.school,
+        address: object.address,
+        classroom: object.classroom,
+        subject: object.subject,
+        citizenship: object.citizenship,
+        passport_series: object.passport_series,
+        passport_number: object.passport_number,
+        password: object.password,
+        venue: object.venue
+      });
+    } catch (error) {
+      console.error('Error initializing store:', error)
+    }
+  }
+
+  async function deleteParticipantItem(index) {
+    try {
+      await axios.delete(`http://5.42.220.6:3000/api/participants/${index}`);
+    } catch (error) {
+      console.error('Error initializing store:', error)
+    }
+  }
+
   async function addPlacement(firstInput, secondInput, thirdInput, fourthInput) {
     if (firstInput.trim() !== '' && secondInput.trim() !== '' && thirdInput.trim() !== '' && fourthInput.trim() !== '') {
       try {
@@ -162,6 +221,28 @@ export const useArrangementStore = defineStore('ArrangementStore', () => {
     }
   }
 
+  async function updatePlacementItem(id, object) {
+    try {
+      await axios.put(`http://5.42.220.6:3000/api/placements/${id}`, {
+        venue: object.venue,
+        room_id: object.room_id,
+        people_at_desk: object.people_at_desk,
+        number_of_tables: object.number_of_tables,
+        available_seats: object.available_seats
+      });
+    } catch (error) {
+      console.error('Error initializing store:', error)
+    }
+  }
+
+  async function deletePlacementItem(index) {
+    try {
+      await axios.delete(`http://5.42.220.6:3000/api/placements/${index}`);
+    } catch (error) {
+      console.error('Error initializing store:', error)
+    }
+  }
+
   async function addVenue(firstInput) {
     if (firstInput.trim() !== '') {
       try {
@@ -171,6 +252,24 @@ export const useArrangementStore = defineStore('ArrangementStore', () => {
       } catch (error) {
         console.error('Error initializing store:', error)
       }
+    }
+  }
+
+  async function updateVenueItem(id, object) {
+    try {
+      await axios.put(`http://5.42.220.6:3000/api/venues/${id}`, {
+        venue: object.venue
+      });
+    } catch (error) {
+      console.error('Error initializing store:', error)
+    }
+  }
+
+  async function deleteVenueItem(index) {
+    try {
+      await axios.delete(`http://5.42.220.6:3000/api/venues/${index}`);
+    } catch (error) {
+      console.error('Error initializing store:', error)
     }
   }
 
@@ -187,9 +286,28 @@ export const useArrangementStore = defineStore('ArrangementStore', () => {
     }
   }
 
-  async function editAccessItem(index) {
+  async function updateAccessItem(id, object) {
+    try {
+      await axios.put(`http://5.42.220.6:3000/api/interface_access/${id}`, {
+        login: object.login,
+        password: object.password
+      });
+    } catch (error) {
+      console.error('Error initializing store:', error)
+    }
+  }
+
+  async function deleteAccessItem(index) {
+    try {
+      await axios.delete(`http://5.42.220.6:3000/api/interface_access/${index}`);
+    } catch (error) {
+      console.error('Error initializing store:', error)
+    }
+  }
+
+  function editItem(index) {
     editingIndex.value = index
   }
 
-  return { checkAuth, editingIndex, placements, participants, organizers, venues, interface_access, createTables, initPlacements, initParticipants, initOrganizers, initVenues, initInterfaceAccess, dropTables, addPlacement, addVenue, addAccess, editAccessItem }
+  return { editingIndex, checkAuth, editItem, placements, participants, organizers, venues, interface_access, createTables, initPlacements, initParticipants, initOrganizers, initVenues, initInterfaceAccess, dropTables, updateOrganizerItem, deleteOrganizerItem, updateParticipantItem, deleteParticipantItem, addPlacement, updatePlacementItem, deletePlacementItem, addVenue, updateVenueItem, deleteVenueItem, addAccess, updateAccessItem, deleteAccessItem, }
 })
