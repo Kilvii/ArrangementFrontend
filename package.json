@@ -12,6 +12,8 @@
     "axios": "^1.6.8",
     "pinia": "^2.1.7",
     "vue": "^3.4.21",
+    "vue-document-editor": "^2.3.2",
+    "vue-file-toolbar-menu": "^2.2.0",
     "vue-router": "^4.3.0",
     "vue-scrolling-table": "^2.0.0"
   },

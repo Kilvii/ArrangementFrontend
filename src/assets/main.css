@@ -1,7 +1,5 @@
 @import './base.css';
 
-@import './base.css';
-
 .navigation {
   display: flex;
   flex-direction: row;

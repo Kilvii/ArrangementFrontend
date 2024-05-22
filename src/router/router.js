@@ -16,7 +16,7 @@ const routes = [
         component: layout('DefaultLayout'),
         children: [
             {
-                path: '/show', name: 'main.show', component: page('Show'),
+                path: '/questionnaire', name: 'main.questionnaire', component: page('WordForm'),
             },
             {
                 path: '/add', name: 'main.add', component: page('Add'),

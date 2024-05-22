@@ -35,9 +35,9 @@ const handleDropTables = () => {
 
 }
 
-const handleShowNavigate = () => {
-    activeTab.value = 'show'
-    router.push({ name: 'main.show' });
+const handleQuestionnaireNavigate = () => {
+    activeTab.value = 'questionnaire'
+    router.push({ name: 'main.questionnaire' });
 }
 
 const handleAddNavigate = () => {
@@ -72,6 +72,8 @@ const exitModal = () => {
             <NavItemComponent title="Управление доступом" :color="activeTab === 'access' ? 'active' : 'default'"
                 @click="handleAccessNavigate" />
             <NavItemComponent title="Удаление таблиц" @click="handleConfirmDelete" />
+            <NavItemComponent title="Формирование анкет" :color="activeTab === 'questionnaire' ? 'active' : 'default'"
+                @click="handleQuestionnaireNavigate" />
             <ModaDeleteComponent v-if="showModal" @close="exitModal()" @deleteItem="handleDropTables" />
         </div>
         <RouterView />
@@ -82,6 +84,6 @@ const exitModal = () => {
 .layout {
     background-color: #181818;
     width: 100%;
-    height: 100vh;
+    height: 100%;
 }
 </style>

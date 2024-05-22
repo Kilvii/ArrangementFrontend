@@ -318,7 +318,7 @@ const handleShowVenues = () => {
     padding: 20px;
     min-width: 320px;
     min-height: 200px;
-
+    height: 100%;
 }
 
 .screens {
