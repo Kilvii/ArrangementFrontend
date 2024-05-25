@@ -6,7 +6,7 @@
 
     <!-- Document editor -->
     <div style="font-family: Avenir, sans-serif">
-      <vue-document-editor v-model:content="content" />
+      <vue-document-editor v-model:content="content" :page_margins="page_margins"/>
     </div>
   </div>
 </template>
@@ -20,35 +20,88 @@ import { useArrangementStore } from '@/stores/ArrangementStore';
 const store = useArrangementStore()
 store.initParticipants()
 
+const subject = reactive(['Русскому Языку', "Математике", "Физике", "Химии", "Биологии", "Литературе", "Географии", "Истории", "Обществознанию", "Английскому языку", "Информатике"])
+const stage = reactive(["школьного", "муниципального", "регионального", "заключительного"])
+const olympiad = reactive(["Всероссийской олимпиады школьников", "Межрегиональной олимпиады школьников «Высшая проба»", "Олимпиады школьников «Ломоносов»", "Межрегиональной олимпиады школьников «САММАТ»", "Турнира имени М.В. Ломоносова", "Всероссийской олимпиады школьников «Нанотехнологии — прорыв в будущее!»", "Межрегиональной олимпиады школьников «Будущие исследователи — будущее науки»"])
+
 const rightData = reactive({
   data: store.participants,
-  editIndex: 0 
+  subjects: "Математике",
+  stages: "регионального",
+  olymdiads: "Всероссийской олимпиады школьников",
+  editIndex: 0
 })
 
 const my_menu = computed(() => [
   {
-    text: "Print",
+    text: "Печать",
     title: "Print",
     icon: "print",
     click: () => window.print()
   },
   {
-    text: "Previous",
-    title: "Previous",
-    icon: "undo",
-    click: () =>  { rightData.editIndex -= 1 }
+    text: "Этапы", menu: [
+      { text: "Школьный", click: () => rightData.stages = stage[0] },
+      { text: "Муниципальный", click: () => rightData.stages = stage[1] },
+      { text: "Региональный", click: () => rightData.stages = stage[2] },
+      { text: "Заключительный", click: () => rightData.stages = stage[3] },
+    ]
   },
   {
-    text: "Next",
+    text: "Предметы", menu: [
+      { text: "Русский язык", click: () => rightData.subjects = subject[0] },
+      { text: "Математика", click: () => rightData.subjects = subject[1] },
+      { text: "Физика", click: () => rightData.subjects = subject[2] },
+      { text: "Химия", click: () => rightData.subjects = subject[3] },
+      { text: "Биология", click: () => rightData.subjects = subject[4] },
+      { text: "Литература", click: () => rightData.subjects = subject[5] },
+      { text: "География", click: () => rightData.subjects = subject[6] },
+      { text: "История", click: () => rightData.subjects = subject[7] },
+      { text: "Обществознание", click: () => rightData.subjects = subject[8] },
+      { text: "Английский язык", click: () => rightData.subjects = subject[9] },
+      { text: "Информатика", click: () => rightData.subjects = subject[10] },
+    ]
+  },
+  {
+    text: "Олимпиады", menu: [
+      { text: "Всероссийская олимпиада школьников", click: () => rightData.olymdiads = olympiad[0] },
+      { text: "Межрегиональная олимпиада школьников «Высшая проба»", click: () => rightData.olymdiads = olympiad[1] },
+      { text: "Олимпиада школьников «Ломоносов»", click: () => rightData.olymdiads = olympiad[2] },
+      { text: "Межрегиональная олимпиада школьников «САММАТ»", click: () => rightData.olymdiads = olympiad[3] },
+      { text: "Турнир имени М.В. Ломоносова", click: () => rightData.olymdiads = olympiad[4] },
+      { text: "Всероссийской олимпиады школьников «Нанотехнологии — прорыв в будущее!»", click: () => rightData.olymdiads = olympiad[5] },
+      { text: "Межрегиональной олимпиады школьников «Будущие исследователи — будущее науки»", click: () => rightData.olymdiads = olympiad[6] },
+    ]
+  },
+  {
+    text: "Предыдущий участник",
+    title: "Previous",
+    icon: "undo",
+    click: () => {
+      if (rightData.editIndex === 0) {
+        return
+      }
+      rightData.editIndex -= 1
+    }
+  },
+  {
+    text: "Следующий участник",
     title: "Next",
     icon: "redo",
-    click: () =>  { rightData.editIndex += 1 }
+    click: () => {
+      if (rightData.editIndex === (store.participants[0].children.length - 1)) {
+        return
+      }
+      rightData.editIndex += 1
+    }
   },
 ]);
 
 const content = ref([
-{ template: markRaw(Questionnaire), props: rightData },
+  { template: markRaw(Questionnaire), props: rightData },
 ])
+
+const page_margins = "5mm 5mm"
 </script>
 
 <style>
