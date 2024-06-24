@@ -72,7 +72,7 @@ const exitModal = () => {
             <NavItemComponent title="Управление доступом" :color="activeTab === 'access' ? 'active' : 'default'"
                 @click="handleAccessNavigate" />
             <NavItemComponent title="Удаление таблиц" @click="handleConfirmDelete" />
-            <NavItemComponent title="Формирование анкет" :color="activeTab === 'questionnaire' ? 'active' : 'default'"
+            <NavItemComponent title="Анкеты участников" :color="activeTab === 'questionnaire' ? 'active' : 'default'"
                 @click="handleQuestionnaireNavigate" />
             <ModaDeleteComponent v-if="showModal" @close="exitModal()" @deleteItem="handleDropTables" />
         </div>
